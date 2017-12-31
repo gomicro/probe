@@ -1,0 +1,17 @@
+language: go
+go:
+  - 1.6
+  - tip
+script:
+  - go test -v $(go list ./... | grep -v /vendor/)
+  - GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o probe_linux-x64 .
+notifications:
+  email: false
+deploy:
+  provider: releases
+  api_key:
+    secure: DekwCw40rA3pASXTRJIEC7T+FnjAZaVvAYaO2TzRFX+dBwQHExidNsGNnZhOpoPz+hbuKFU/nS78J1c9BG950bCMAP8hhode3J8O1q6HQWLJqSz1DmpT+Jrxy9VIC6qWGO7IaQT68Xq75oW7J5vWjP9bMx6KlcQRJM+mAaHo1BPw3l+/nrcnkgjLlMSMbBjNs8YUYWWDcj1JpGH+gRMzqIFBAILIstj1aGJilU8ts+w0NHRwgNXoPMp8XfKD0wSMx1yXNV3zZNzOw76D1VkJ2vjMqEjYDq94cXZyXwVRcIpa2MuExOwCaI2C+uXif+IRnrTlID2zFdhJjbNsxzlT2Qif1E174cMWdHQGI73K65iOFqFjCrnWxf/BSqtRTI0yG/eLLWxCzVuFPkxCuEWrr32cAj66IuVqxzhDj80woGbiivsEsaq2EfxCcuvnE5RmuT59aw7ZxXyHauKu8i40uqhEi/7kKHTm+wWJ+6G7lqfoE0y7HqlVOSz8t2IUMyOWNhd6RlODlK+yhkF3GulLXIJM+qzkYuhPy9nh65Dj+J4WGqU6BBkm4LQFhyrxTMtjm5SLeEA9GyH5n1P7plxgpDRXvL/RWHIgZkb9offcQRxhjr22+9e6j7XaZpeiKPhvP0kdoFSkYbXzfzYqL3jw6Cdktc761tsbd61Nrlj8oQ0=
+  skip_cleanup: true
+  file: probe_linux-x64
+  on:
+    tags: true
