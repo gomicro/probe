@@ -4,7 +4,7 @@ go:
   - tip
 script:
   - go test -v $(go list ./... | grep -v /vendor/)
-  - GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build probe_linux-x64 .
+  - GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o probe_linux-x64 .
 notifications:
   email: false
 deploy:
