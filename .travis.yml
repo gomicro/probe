@@ -1,0 +1,10 @@
+language: go
+go:
+  - 1.6
+  - tip
+script:
+  - go test -v $(go list ./... | grep -v /vendor/)
+  - GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o releases/linux/probe .
+  - tar czvf releases/probe_linux-64bit.tar.gz -C releases/linux probe
+notifications:
+  email: false
