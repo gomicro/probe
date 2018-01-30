@@ -17,15 +17,16 @@ var (
 
 func init() {
 	cobra.OnInitialize(initEnvs)
+
 	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "show more verbose output")
-	RootCmd.PersistentFlags().BoolVarP(&skipVerify, "insecure", "k", false, "permit operations for servers otherwise considered insecure")
+	RootCmd.Flags().BoolVarP(&skipVerify, "insecure", "k", false, "permit operations for servers otherwise considered insecure")
 }
 
 func initEnvs() {
 }
 
 var RootCmd = &cobra.Command{
-	Use:   "probe",
+	Use:   "probe [flags] URL",
 	Short: "Lightweight healthchecker for scratch containers",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
