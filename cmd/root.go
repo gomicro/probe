@@ -11,12 +11,14 @@ import (
 )
 
 var (
-	verbose bool
+	verbose    bool
+	skipVerify bool
 )
 
 func init() {
 	cobra.OnInitialize(initEnvs)
 	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "show more verbose output")
+	RootCmd.PersistentFlags().BoolVarP(&skipVerify, "insecure", "k", false, "permit operations for servers otherwise considered insecure")
 }
 
 func initEnvs() {
@@ -48,12 +50,18 @@ func probe(cmd *cobra.Command, args []string) {
 		fmt.Printf("Error: failed to create cert pool: %v\n", err.Error())
 	}
 
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			RootCAs:            pool,
-			InsecureSkipVerify: true,
-		},
+	tlsConfig := &tls.Config{
+		RootCAs: pool,
 	}
+
+	if skipVerify {
+		tlsConfig.InsecureSkipVerify = true
+	}
+
+	transport := &http.Transport{
+		TLSClientConfig: tlsConfig,
+	}
+
 	client := &http.Client{Transport: transport}
 
 	resp, err := client.Get(args[0])
