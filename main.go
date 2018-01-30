@@ -25,7 +25,10 @@ func main() {
 	}
 
 	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{RootCAs: pool},
+		TLSClientConfig: &tls.Config{
+			RootCAs:            pool,
+			InsecureSkipVerify: true,
+		},
 	}
 	client := &http.Client{Transport: transport}
 
