@@ -10,8 +10,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	verbose bool
+)
+
 func init() {
 	cobra.OnInitialize(initEnvs)
+	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "show more verbose output")
 }
 
 func initEnvs() {
