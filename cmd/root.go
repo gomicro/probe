@@ -2,12 +2,14 @@ package cmd
 
 import (
 	"crypto/tls"
-	"fmt"
+	"errors"
 	"net/http"
 	"os"
 
 	"github.com/certifi/gocertifi"
 	"github.com/spf13/cobra"
+
+	"github.com/gomicro/probe/fmt"
 )
 
 var (
@@ -18,19 +20,19 @@ var (
 func init() {
 	cobra.OnInitialize(initEnvs)
 
-	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "show more verbose output")
-	RootCmd.Flags().BoolVarP(&skipVerify, "insecure", "k", false, "permit operations for servers otherwise considered insecure")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "show more verbose output")
+	rootCmd.Flags().BoolVarP(&skipVerify, "insecure", "k", false, "permit operations for servers otherwise considered insecure")
 }
 
 func initEnvs() {
 }
 
-var RootCmd = &cobra.Command{
+var rootCmd = &cobra.Command{
 	Use:   "probe [flags] URL",
 	Short: "Lightweight healthchecker for scratch containers",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return fmt.Errorf("Expected url to access")
+			return errors.New("Expected url to access")
 		}
 
 		return nil
@@ -38,9 +40,11 @@ var RootCmd = &cobra.Command{
 	Run: probe,
 }
 
+// Execute adds all child commands to the root command and sets flags appropriately.
+// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	if err := RootCmd.Execute(); err != nil {
-		printf("Failed to execute: %v\n", err.Error())
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Printf("Failed to execute: %v\n", err.Error())
 		os.Exit(1)
 	}
 }
@@ -48,7 +52,7 @@ func Execute() {
 func probe(cmd *cobra.Command, args []string) {
 	pool, err := gocertifi.CACerts()
 	if err != nil {
-		printf("Error: failed to create cert pool: %v\n", err.Error())
+		fmt.Printf("Error: failed to create cert pool: %v\n", err.Error())
 	}
 
 	tlsConfig := &tls.Config{
@@ -67,22 +71,12 @@ func probe(cmd *cobra.Command, args []string) {
 
 	resp, err := client.Get(args[0])
 	if err != nil {
-		verbosef("error: http get: %v", err.Error())
+		fmt.Verbosef("error: http get: %v", err.Error())
 		os.Exit(1)
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		verbosef("error: status %v", resp.StatusCode)
+		fmt.Verbosef("error: status %v", resp.StatusCode)
 		os.Exit(1)
-	}
-}
-
-func printf(f string, args ...interface{}) {
-	fmt.Println(fmt.Sprintf(f, args...))
-}
-
-func verbosef(f string, args ...interface{}) {
-	if verbose {
-		fmt.Println(fmt.Sprintf(f, args...))
 	}
 }
