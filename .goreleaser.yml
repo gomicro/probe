@@ -1,0 +1,16 @@
+
+builds:
+- env:
+    - CGO_ENABLED=0
+
+  ldflags:
+    - -X "github.com/gomicro/probe/cmd.Version={{.Env.VERSION}}"
+
+  goos:
+    - darwin
+    - windows
+    - linux
+
+archives:
+  -
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
