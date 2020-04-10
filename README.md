@@ -1,5 +1,5 @@
 # Probe
-[![Build Status](https://travis-ci.org/gomicro/probe.svg)](https://travis-ci.org/gomicro/probe)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/gomicro/probe/Build/master)](https://github.com/gomicro/probe/actions?query=workflow%3ABuild+branch%3Amaster)
 [![Go Reportcard](https://goreportcard.com/badge/github.com/gomicro/probe)](https://goreportcard.com/report/github.com/gomicro/probe)
 [![GoDoc](https://godoc.org/github.com/gomicro/probe?status.svg)](https://godoc.org/github.com/gomicro/probe)
 [![License](https://img.shields.io/github/license/gomicro/probe.svg)](https://github.com/gomicro/probe/blob/master/LICENSE.md)
