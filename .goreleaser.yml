@@ -14,3 +14,13 @@ builds:
 archives:
   -
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+
+dockers:
+  -
+    goos: linux
+
+    goarch: amd64
+
+    image_templates:
+      - "gomicro/probe:latest"
+      - "gomicro/probe:{{ .Env.VERSION }}"
