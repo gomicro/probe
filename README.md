@@ -7,10 +7,15 @@
 
 Probe is for use inside of Docker Containers build on the `scratch` image.  Given the lack of any tools to do something as simple as a curl command, it is not possible to add a `HEALTHCHECK` to your Dockerfile.  Probe provides an ultra stripped down curl command to bundle with your super slim containers.
 
-# Requirements
-Golang version 1.6 or higher
-
 # Installation
+
+## Precompiled Binary
+
+See the [Latest Release](https://github.com/gomicro/probe/releases/latest) page for a download link to the binary compiled for your system.
+
+## From Source
+
+Requires Golang version 1.14 or higher
 
 ```
 go get -u github.com/gomicro/probe
