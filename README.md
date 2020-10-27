@@ -15,8 +15,6 @@ See the [Latest Release](https://github.com/gomicro/probe/releases/latest) page 
 
 ## From Source
 
-Requires Golang version 1.14 or higher
-
 ```
 go get -u github.com/gomicro/probe
 go install github.com/gomicro/probe
