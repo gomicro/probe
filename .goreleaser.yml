@@ -5,6 +5,7 @@ builds:
 
   ldflags:
     - -X "github.com/gomicro/probe/cmd.Version={{.Env.VERSION}}"
+    - "-s -w"
 
   goos:
     - darwin
