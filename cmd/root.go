@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"golang.org/x/net/http2"
+
 	"github.com/certifi/gocertifi"
 	"github.com/spf13/cobra"
 
@@ -15,6 +17,7 @@ import (
 var (
 	verbose    bool
 	skipVerify bool
+	grpc       bool
 )
 
 func init() {
@@ -22,6 +25,7 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "show more verbose output")
 	rootCmd.Flags().BoolVarP(&skipVerify, "insecure", "k", false, "permit operations for servers otherwise considered insecure")
+	rootCmd.Flags().BoolVarP(&grpc, "grpc", "g", false, "use http2 transport for grpc health check")
 }
 
 func initEnvs() {
@@ -63,8 +67,17 @@ func probe(cmd *cobra.Command, args []string) {
 		tlsConfig.InsecureSkipVerify = true
 	}
 
-	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
+	var transport http.RoundTripper
+
+	switch grpc {
+	case true:
+		transport = &http2.Transport{
+			TLSClientConfig: tlsConfig,
+		}
+	default:
+		transport = &http.Transport{
+			TLSClientConfig: tlsConfig,
+		}
 	}
 
 	client := &http.Client{Transport: transport}
