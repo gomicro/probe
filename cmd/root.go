@@ -3,21 +3,23 @@ package cmd
 import (
 	"crypto/tls"
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
-
-	"golang.org/x/net/http2"
 
 	"github.com/certifi/gocertifi"
 	"github.com/spf13/cobra"
 
-	"github.com/gomicro/probe/fmt"
+	ffmt "github.com/gomicro/probe/fmt"
 )
 
 var (
 	verbose    bool
 	skipVerify bool
 	grpc       bool
+
+	ErrHttpGet       = errors.New("http client: get")
+	ErrHttpBadStatus = errors.New("http status: not ok")
 )
 
 func init() {
@@ -54,6 +56,19 @@ func Execute() {
 }
 
 func probe(cmd *cobra.Command, args []string) {
+	err := probeHttp(args[0])
+	if err != nil {
+		if errors.Is(err, ErrHttpGet) {
+			ffmt.Printf("%v", err.Error())
+			os.Exit(2)
+		}
+
+		ffmt.Verbosef("%v", err.Error())
+		os.Exit(1)
+	}
+}
+
+func probeHttp(host string) error {
 	pool, err := gocertifi.CACerts()
 	if err != nil {
 		fmt.Printf("Error: failed to create cert pool: %v\n", err.Error())
@@ -67,29 +82,20 @@ func probe(cmd *cobra.Command, args []string) {
 		tlsConfig.InsecureSkipVerify = true
 	}
 
-	var transport http.RoundTripper
-
-	switch grpc {
-	case true:
-		transport = &http2.Transport{
-			TLSClientConfig: tlsConfig,
-		}
-	default:
-		transport = &http.Transport{
-			TLSClientConfig: tlsConfig,
-		}
+	transport := &http.Transport{
+		TLSClientConfig: tlsConfig,
 	}
 
 	client := &http.Client{Transport: transport}
 
-	resp, err := client.Get(args[0])
+	resp, err := client.Get(host)
 	if err != nil {
-		fmt.Verbosef("error: http get: %v", err.Error())
-		os.Exit(1)
+		return fmt.Errorf("%w: %v", ErrHttpGet, err.Error())
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		fmt.Verbosef("error: status %v", resp.StatusCode)
-		os.Exit(1)
+		return fmt.Errorf("%w: status %v", ErrHttpBadStatus, resp.StatusCode)
 	}
+
+	return nil
 }
