@@ -36,7 +36,7 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "show more verbose output")
 	rootCmd.Flags().BoolVarP(&skipVerify, "insecure", "k", false, "permit operations for servers otherwise considered insecure")
-	rootCmd.Flags().BoolVarP(&grpcFlag, "grpc", "g", false, "use http2 transport for grpc health check")
+	rootCmd.Flags().BoolVarP(&grpcFlag, "grpc", "g", false, "use grpc health to check a grpc service")
 }
 
 func initEnvs() {
