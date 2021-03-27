@@ -46,7 +46,7 @@ func TestProbe(t *testing.T) {
 
 			err := probeHttp(host)
 			Expect(err).To(HaveOccurred())
-			Expect(errors.Is(err, ErrHttpBadStatus)).To(BeTrue())
+			Expect(errors.Is(err, ErrHTTPBadStatus)).To(BeTrue())
 
 			hr := server.HitRecords()
 			Expect(len(hr)).To(Equal(1))
