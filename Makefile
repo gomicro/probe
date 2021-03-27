@@ -18,6 +18,7 @@ APP := $(shell basename $(PWD) | tr '[:upper:]' '[:lower:]')
 
 GIT_COMMIT_HASH ?= $(shell git rev-parse --short HEAD)
 BUILD_VERSION := dev-$(GIT_COMMIT_HASH)
+DEPLOY_VERSION := $(shell echo $${GITHUB_REF/refs\/tags\//})
 
 
 .PHONY: all
@@ -44,7 +45,7 @@ coverage: ## Generates the total code coverage of the project
 deploy: ## Deploy the artifacts
 	@echo "Logging into Docker Hub"
 	-@echo "$(DOCKER_PASSWORD)" | docker login -u "$(DOCKER_USERNAME)" --password-stdin
-	@ext/goreleaser release
+	@VERSION=$(DEPLOY_VERSION) goreleaser release
 
 .PHONY: help
 help: ## Show This Help
