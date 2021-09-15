@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/certifi/gocertifi"
+	"github.com/gomicro/trust"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	health_pb "google.golang.org/grpc/health/grpc_health_v1"
@@ -70,7 +70,7 @@ func probe(cmd *cobra.Command, args []string) {
 	if grpcFlag {
 		err = probeGrpc(args[0])
 	} else {
-		err = probeHttp(args[0])
+		err = probeHTTP(args[0])
 	}
 
 	if err != nil {
@@ -84,25 +84,22 @@ func probe(cmd *cobra.Command, args []string) {
 	}
 }
 
-func probeHttp(host string) error {
-	pool, err := gocertifi.CACerts()
+func probeHTTP(host string) error {
+	pool := trust.New()
+
+	certs, err := pool.CACerts()
 	if err != nil {
 		fmt.Printf("Error: failed to create cert pool: %v\n", err.Error())
 	}
 
-	tlsConfig := &tls.Config{
-		RootCAs: pool,
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				RootCAs:            certs,
+				InsecureSkipVerify: skipVerify,
+			},
+		},
 	}
-
-	if skipVerify {
-		tlsConfig.InsecureSkipVerify = true
-	}
-
-	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
-	}
-
-	client := &http.Client{Transport: transport}
 
 	resp, err := client.Get(host)
 	if err != nil {

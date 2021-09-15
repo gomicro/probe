@@ -16,10 +16,11 @@ import (
 // HitRecord represents a recording of information from a single hit againstr
 // the bogus server
 type HitRecord struct {
-	Verb  string
-	Path  string
-	Query url.Values
-	Body  []byte
+	Verb   string
+	Path   string
+	Query  url.Values
+	Body   []byte
+	Header http.Header
 }
 
 // Bogus represents a test server
@@ -64,12 +65,18 @@ func (b *Bogus) HandlePaths(w http.ResponseWriter, r *http.Request) {
 	r.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 	defer r.Body.Close()
 
-	b.hitRecords = append(b.hitRecords, HitRecord{r.Method, r.URL.Path, r.URL.Query(), bodyBytes})
+	b.hitRecords = append(b.hitRecords, HitRecord{
+		Verb:   r.Method,
+		Path:   r.URL.Path,
+		Query:  r.URL.Query(),
+		Body:   bodyBytes,
+		Header: r.Header,
+	})
 
 	path, ok := b.paths[r.URL.Path]
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("Not Found"))
+		w.Write([]byte("Not Found")) //nolint,errcheck
 		return
 	}
 
