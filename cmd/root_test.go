@@ -30,7 +30,7 @@ func TestProbe(t *testing.T) {
 				SetMethods("GET").
 				SetPayload([]byte("ok"))
 
-			err := probeHttp(host)
+			err := probeHTTP(host)
 			Expect(err).NotTo(HaveOccurred())
 
 			hr := server.HitRecords()
@@ -44,7 +44,7 @@ func TestProbe(t *testing.T) {
 				SetStatus(http.StatusNotFound).
 				SetPayload([]byte("bad"))
 
-			err := probeHttp(host)
+			err := probeHTTP(host)
 			Expect(err).To(HaveOccurred())
 			Expect(errors.Is(err, ErrHTTPBadStatus)).To(BeTrue())
 
