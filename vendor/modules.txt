@@ -1,11 +1,7 @@
-# github.com/certifi/gocertifi v0.0.0-20171105132559-a4ab0227d360
-## explicit
-github.com/certifi/gocertifi
-# github.com/franela/goblin v0.0.0-20180407132755-cd5d08fb4ede
+# github.com/franela/goblin v0.0.0-20200512143142-b260c999b2d7
 ## explicit
 github.com/franela/goblin
 # github.com/fsnotify/fsnotify v1.4.9
-## explicit
 github.com/fsnotify/fsnotify
 # github.com/golang/protobuf v1.4.2
 github.com/golang/protobuf/proto
@@ -13,12 +9,15 @@ github.com/golang/protobuf/ptypes
 github.com/golang/protobuf/ptypes/any
 github.com/golang/protobuf/ptypes/duration
 github.com/golang/protobuf/ptypes/timestamp
-# github.com/gomicro/bogus v0.1.1
+# github.com/gomicro/bogus v0.1.2
 ## explicit
 github.com/gomicro/bogus
 github.com/gomicro/bogus/paths
 # github.com/gomicro/penname v0.1.0
 ## explicit
+# github.com/gomicro/trust v0.0.1
+## explicit
+github.com/gomicro/trust
 # github.com/hashicorp/hcl v1.0.0
 github.com/hashicorp/hcl
 github.com/hashicorp/hcl/hcl/ast
@@ -37,7 +36,7 @@ github.com/magiconair/properties
 # github.com/mitchellh/mapstructure v1.2.2
 ## explicit
 github.com/mitchellh/mapstructure
-# github.com/onsi/gomega v1.9.0
+# github.com/onsi/gomega v1.10.1
 ## explicit
 github.com/onsi/gomega
 github.com/onsi/gomega/format
@@ -110,7 +109,7 @@ golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
-# golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543
+# golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 golang.org/x/xerrors
 golang.org/x/xerrors/internal
 # google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
@@ -195,5 +194,5 @@ google.golang.org/protobuf/types/known/timestamppb
 # gopkg.in/ini.v1 v1.55.0
 ## explicit
 gopkg.in/ini.v1
-# gopkg.in/yaml.v2 v2.2.8
+# gopkg.in/yaml.v2 v2.3.0
 gopkg.in/yaml.v2
